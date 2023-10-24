@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Product } from "./product";
 
 @Entity("users")
 export class User {
@@ -18,4 +19,7 @@ export class User {
     nullable: true,
   })
   cpf: string;
+
+  @OneToMany(() => Product, (product) => product.user)
+  products: Product[];
 }
