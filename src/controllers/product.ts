@@ -5,10 +5,27 @@ import { AppDataSource } from "../database/data-source";
 
 class ProductController {
   async createProduct(req: Request, res: Response) {
-    const { title, price, color, size } = req.body;
+    console.log(req.body);
+    const { title, price, color, size, user_id } = req.body;
 
     if (!title) {
       return res.status(400).json({ message: "O campo title é obrigatório" });
+    }
+
+    if (!price) {
+      return res.status(400).json({ message: "O campo price é obrigatório" });
+    }
+
+    if (!color) {
+      return res.status(400).json({ message: "O campo color é obrigatório" });
+    }
+
+    if (!size) {
+      return res.status(400).json({ message: "O campo size é obrigatório" });
+    }
+
+    if (!user_id) {
+      return res.status(400).json({ message: "O campo user_id é obrigatório" });
     }
 
     try {
@@ -17,6 +34,7 @@ class ProductController {
         price,
         color,
         size,
+        user_id,
       });
 
       return res.status(201).json(product);
@@ -29,14 +47,14 @@ class ProductController {
   async listProducts(req: Request, res: Response) {
     try {
       const products = await AppDataSource.getRepository(Product).find({
-        relations: ["products", "products.categories"],
+        relations: ["user"],
       });
       return res.status(200).json(products);
     } catch (error) {
       console.log(error, "erro ao listar produtos");
       return res
         .status(500)
-        .json({ message: "Erro ao criar produto, tente novamente" });
+        .json({ message: "Erro ao listar produto, tente novamente" });
     }
   }
 

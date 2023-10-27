@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -26,6 +27,12 @@ export class Product {
   @Column()
   size: string;
 
+  @Column({ default: 0 })
+  quantity: number;
+
+  @Column()
+  user_id: number;
+
   @CreateDateColumn()
   created_at: Date;
 
@@ -36,5 +43,6 @@ export class Product {
   deleted_at: Date;
 
   @ManyToOne(() => User, (user) => user.products)
+  @JoinColumn({ name: "user_id" })
   user: User;
 }

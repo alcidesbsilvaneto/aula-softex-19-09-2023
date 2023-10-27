@@ -13,7 +13,7 @@ export class User {
   email: string;
 
   @Column()
-  password: string;
+  password_hash: string;
 
   @Column({
     nullable: true,

@@ -7,7 +7,7 @@ export const cadastrarUsuario = async (req: Request, res: Response) => {
     const user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
-    user.password = req.body.password;
+    user.password_hash = req.body.password;
     user.cpf = req.body.cpf;
 
     await AppDataSource.getRepository(User).save(user);
@@ -23,7 +23,9 @@ export const cadastrarUsuario = async (req: Request, res: Response) => {
 
 export const listarUsuarios = async (req: Request, res: Response) => {
   try {
-    const users = await AppDataSource.getRepository(User).find();
+    const users = await AppDataSource.getRepository(User).find({
+      relations: ["products"],
+    });
     return res.status(200).json({ ok: true, users: users });
   } catch (error) {
     console.log(error, "Erro ao listar usuários");
@@ -56,7 +58,7 @@ export const atualizarUsuario = async (req: Request, res: Response) => {
     }
 
     if (req.body.password) {
-      user.password = req.body.password;
+      user.password_hash = req.body.password;
     }
 
     if (req.body.cpf) {
